@@ -15,7 +15,7 @@ import { Key } from 'vscode-extension-tester'
 export class KeyDetailsView extends WebView {
   keyType = By.xpath(`//div[contains(@class, '_keyFlexGroup')]`)
   keySize = By.xpath(`//div[@data-testid='key-size-text']`)
-  keyLength = By.xpath(`//div[@data-testid='key-length-text']`)
+  keyLength = By.xpath(`//div[@data-testid='top-level-values']`)
   refreshKeyButton = By.xpath(`//*[@data-testid='key-refresh-btn']`)
   refreshKeyArrow = By.xpath(`//*[@data-testid='key-auto-refresh-config-btn']`)
   refreshKeyMessage = By.xpath(`//*[@data-testid='key-refresh-message']`)

@@ -45,9 +45,9 @@ const KeyDetailsHeaderSizeLength = ({
       {type && (
         <div
           className={styles.subtitleText}
-          data-testid="key-length-text"
+          data-testid="top-level-values"
         >
-          {LENGTH_NAMING_BY_TYPE[type] ?? l10n.t('Length')}
+          {LENGTH_NAMING_BY_TYPE[type] ?? l10n.t('Top-level values')}
           {': '}
           {length ?? '-'}
         </div>
