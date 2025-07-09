@@ -10,6 +10,7 @@ import {
   formatLongName,
   getRedisModulesSummary,
   sendEventTelemetry,
+  getRedisInfoSummary,
 } from 'uiSrc/utils'
 import { ContextStoreProvider, Database, DatabaseOverview, checkConnectToDatabase, deleteDatabases, fetchDatabaseOverviewById } from 'uiSrc/store'
 import { Chevron, DatabaseIcon, Tooltip } from 'uiSrc/ui'
@@ -62,7 +63,7 @@ export const DatabaseWrapper = React.memo(({ database }: Props) => {
     }
   }, [])
 
-  const handleCheckConnectToDatabase = ({ id, provider, modules }: Database) => {
+  const handleCheckConnectToDatabase = async ({ id, provider, modules }: Database) => {
     const newShowTree = !showTree
     sessionStorageService.set(`${StorageItem.openTreeDatabase + id}`, newShowTree)
 
@@ -71,12 +72,15 @@ export const DatabaseWrapper = React.memo(({ database }: Props) => {
       return
     }
     const modulesSummary = getRedisModulesSummary(modules)
+    const infoData = await getRedisInfoSummary(id)
+
     sendEventTelemetry({
       event: TelemetryEvent.CONFIG_DATABASES_OPEN_DATABASE,
       eventData: {
         databaseId: id,
         provider,
         ...modulesSummary,
+        ...infoData,
       },
     })
 

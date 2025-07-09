@@ -508,3 +508,26 @@ export interface AdditionalRedisModule {
   version?: number
   semanticVersion?: string
 }
+
+interface RedisDatabaseStatsDto {
+  instantaneous_input_kbps: string | undefined
+  instantaneous_ops_per_sec: string | undefined
+  instantaneous_output_kbps: string | undefined
+  maxmemory_policy: string | undefined
+  numberOfKeysRange: string | undefined
+  uptime_in_days: string | undefined
+}
+
+export interface RedisNodeInfoResponseInterface {
+  version: string
+  role?: 'master' | 'slave'
+  server?: any
+  stats?: RedisDatabaseStatsDto
+  databases?: number
+  usedMemory?: number
+  totalKeys?: number
+  connectedClients?: number
+  uptimeInSeconds?: number
+  hitRatio?: number
+  cashedScripts?: number
+}

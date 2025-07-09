@@ -6,6 +6,7 @@ import { AdditionalRedisModule } from 'uiSrc/store'
 import { apiService } from 'uiSrc/services'
 import { ApiEndpoints, DEFAULT_SUMMARY, KeyTypes, SUPPORTED_REDIS_MODULES } from 'uiSrc/constants'
 import { useAppInfoStore } from 'uiSrc/store/hooks/use-app-info-store/useAppInfoStore'
+import { getInstanceInfo } from 'uiSrc/services/databaseService'
 import { IModuleSummary, IRedisModulesSummary, ITelemetrySendEvent, MatchType, RedisModules, RedisModulesKeyType } from './interfaces'
 import { isRedisearchAvailable, isTriggeredAndFunctionsAvailable } from '../database'
 
@@ -42,6 +43,29 @@ const getModuleSummaryToSent = (module: AdditionalRedisModule): IModuleSummary =
   version: module.version,
   semanticVersion: module.semanticVersion,
 })
+
+export const getRedisInfoSummary = async (id: string) => {
+  let infoData: any = {}
+  try {
+    const info = await getInstanceInfo(id)
+    infoData = {
+      redis_version: info?.version,
+      uptime_in_days: info?.stats?.uptime_in_days,
+      used_memory: info?.usedMemory,
+      connected_clients: info?.connectedClients,
+      maxmemory_policy: info?.stats?.maxmemory_policy,
+      instantaneous_ops_per_sec: info?.stats?.instantaneous_ops_per_sec,
+      instantaneous_input_kbps: info?.stats?.instantaneous_input_kbps,
+      instantaneous_output_kbps: info?.stats?.instantaneous_output_kbps,
+      numberOfKeysRange: info?.stats?.numberOfKeysRange,
+      totalKeys: info?.totalKeys,
+    }
+  } catch (e) {
+    // continue regardless of error
+  }
+
+  return infoData
+}
 
 export const getRedisModulesSummary = (modules: AdditionalRedisModule[] = []): IRedisModulesSummary => {
   const summary = cloneDeep(DEFAULT_SUMMARY)
