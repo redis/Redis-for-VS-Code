@@ -219,6 +219,17 @@ export async function activate(context: vscode.ExtensionContext) {
   )
 
   registerUriHandler()
+
+  function helloWorld() {
+    const text = 'hello world'
+    console.log(text)
+
+    return text
+  }
+
+  return {
+    helloWorld,
+  }
 }
 
 export function deactivate() {
