@@ -11,6 +11,7 @@ import { getTitleForKey, handleMessage } from './utils'
 import { ViewId } from './constants'
 import { logger } from './logger'
 import { registerUriHandler } from './utils/handleUri'
+import * as extensionApi from './extensionApi'
 
 dotenv.config({ path: path.join(__dirname, '..', '.env') })
 
@@ -220,15 +221,20 @@ export async function activate(context: vscode.ExtensionContext) {
 
   registerUriHandler()
 
-  function helloWorld() {
-    const text = 'hello world'
-    console.log(text)
-
-    return text
-  }
-
+  // Return the extension API to expose functionalities to the outer world
   return {
-    helloWorld,
+    // Core database operations
+    getAllDatabases: extensionApi.getAllDatabases,
+    getDatabaseById: extensionApi.getDatabaseById,
+
+    // Index operations
+    getIndexDefinition: extensionApi.getIndexDefinition,
+    getAllIndexes: extensionApi.getAllIndexes,
+    hasRedisSearchModule: extensionApi.hasRedisSearchModule,
+
+    // CLI operations
+    openCliForDatabase: extensionApi.openCliForDatabase,
+    executeRedisCommand: extensionApi.executeRedisCommand,
   }
 }
 
