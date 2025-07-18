@@ -1,5 +1,7 @@
 import * as vscode from 'vscode'
-import axios from 'axios'
+import * as http from 'http'
+import * as https from 'https'
+import { URL } from 'url'
 import { getUIStorageField, setUIStorageField } from './lib'
 
 /*
@@ -56,13 +58,76 @@ async function getBackendBaseUrl(): Promise<string> {
   return `http://localhost:${appPort}`
 }
 
+// Helper function to make HTTP requests using Node.js built-in modules
+async function makeHttpRequest(
+  url: string,
+  method: 'GET' | 'POST' | 'DELETE' = 'GET',
+  data?: any,
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const parsedUrl = new URL(url)
+    const isHttps = parsedUrl.protocol === 'https:'
+    const httpModule = isHttps ? https : http
+
+    const headers: { [key: string]: string | number } = {
+      'Content-Type': 'application/json',
+    }
+
+    if (data && method === 'POST') {
+      const postData = JSON.stringify(data)
+      headers['Content-Length'] = Buffer.byteLength(postData)
+    }
+
+    const options = {
+      hostname: parsedUrl.hostname,
+      port: parsedUrl.port || (isHttps ? 443 : 80),
+      path: parsedUrl.pathname + parsedUrl.search,
+      method,
+      headers,
+    }
+
+    const req = httpModule.request(options, (res) => {
+      let responseData = ''
+
+      res.on('data', (chunk) => {
+        responseData += chunk
+      })
+
+      res.on('end', () => {
+        try {
+          const parsedData = responseData ? JSON.parse(responseData) : {}
+          resolve({
+            status: res.statusCode,
+            data: parsedData,
+          })
+        } catch (error) {
+          resolve({
+            status: res.statusCode,
+            data: responseData,
+          })
+        }
+      })
+    })
+
+    req.on('error', (error) => {
+      reject(error)
+    })
+
+    if (data && method === 'POST') {
+      req.write(JSON.stringify(data))
+    }
+
+    req.end()
+  })
+}
+
 // Helper function to execute Redis CLI command on a database
 async function executeCliCommand(databaseId: string, command: string): Promise<CliCommandResponse | null> {
   try {
     const baseUrl = await getBackendBaseUrl()
 
     // First create a CLI client for the database
-    const createResponse = await axios.post(`${baseUrl}/databases/${databaseId}/cli`)
+    const createResponse = await makeHttpRequest(`${baseUrl}/databases/${databaseId}/cli`, 'POST')
 
     if (createResponse.status !== 201) {
       console.error('Failed to create CLI client')
@@ -78,8 +143,9 @@ async function executeCliCommand(databaseId: string, command: string): Promise<C
 
     try {
       // Execute the command
-      const commandResponse = await axios.post(
+      const commandResponse = await makeHttpRequest(
         `${baseUrl}/databases/${databaseId}/cli/${cliClientUuid}/send-command`,
+        'POST',
         {
           command,
           outputFormat: 'RAW',
@@ -87,7 +153,7 @@ async function executeCliCommand(databaseId: string, command: string): Promise<C
       )
 
       // Clean up: delete the CLI client
-      await axios.delete(`${baseUrl}/databases/${databaseId}/cli/${cliClientUuid}`)
+      await makeHttpRequest(`${baseUrl}/databases/${databaseId}/cli/${cliClientUuid}`, 'DELETE')
 
       if (commandResponse.status === 200) {
         return {
@@ -100,7 +166,7 @@ async function executeCliCommand(databaseId: string, command: string): Promise<C
     } catch (error) {
       // Clean up: delete the CLI client even if command execution failed
       try {
-        await axios.delete(`${baseUrl}/databases/${databaseId}/cli/${cliClientUuid}`)
+        await makeHttpRequest(`${baseUrl}/databases/${databaseId}/cli/${cliClientUuid}`, 'DELETE')
       } catch (cleanupError) {
         console.error('Failed to cleanup CLI client:', cleanupError)
       }
@@ -119,7 +185,7 @@ async function executeCliCommand(databaseId: string, command: string): Promise<C
 export async function getAllDatabases(): Promise<DatabaseInstance[]> {
   try {
     const baseUrl = await getBackendBaseUrl()
-    const response = await axios.get(`${baseUrl}/databases`)
+    const response = await makeHttpRequest(`${baseUrl}/databases`)
 
     if (response.status === 200 && Array.isArray(response.data)) {
       return response.data.map((db: any) => ({
