@@ -112,6 +112,12 @@
         "title": "Show extension output",
         "category": "Redis for VS Code",
         "icon": "$(add)"
+      },
+      {
+        "command": "RedisForVSCode.getAllDatabases",
+        "title": "Get All Redis Databases",
+        "category": "Redis for VS Code",
+        "icon": "$(add)"
       }
     ],
     "menus": {

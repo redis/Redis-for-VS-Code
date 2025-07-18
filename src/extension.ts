@@ -11,7 +11,7 @@ import { getTitleForKey, handleMessage } from './utils'
 import { ViewId } from './constants'
 import { logger } from './logger'
 import { registerUriHandler } from './utils/handleUri'
-import * as extensionApi from './extensionApi'
+import * as extensionApiMock from './extensionApiMock'
 
 dotenv.config({ path: path.join(__dirname, '..', '.env') })
 
@@ -217,6 +217,14 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('RedisForVSCode.refreshDatabases', () => {
       sidebarProvider.view?.webview.postMessage({ action: 'RefreshTree' })
     }),
+
+    // TODO [DA]: Remove, added for testing purposes
+    vscode.commands.registerCommand('RedisForVSCode.getAllDatabases', async () => {
+      const dbs = await extensionApiMock.getAllDatabases()
+      vscode.window.showInformationMessage(
+        `Found ${dbs.length} database(s).: ${dbs.map((db) => db.name).join(', ')}`,
+      )
+    }),
   )
 
   registerUriHandler()
@@ -224,17 +232,17 @@ export async function activate(context: vscode.ExtensionContext) {
   // Return the extension API to expose functionalities to the outer world
   return {
     // Core database operations
-    getAllDatabases: extensionApi.getAllDatabases,
-    getDatabaseById: extensionApi.getDatabaseById,
+    getAllDatabases: extensionApiMock.getAllDatabases,
+    getDatabaseById: extensionApiMock.getDatabaseById,
 
     // Index operations
-    getIndexDefinition: extensionApi.getIndexDefinition,
-    getAllIndexes: extensionApi.getAllIndexes,
-    hasRedisSearchModule: extensionApi.hasRedisSearchModule,
+    getIndexDefinition: extensionApiMock.getIndexDefinition,
+    getAllIndexes: extensionApiMock.getAllIndexes,
+    hasRedisSearchModule: extensionApiMock.hasRedisSearchModule,
 
     // CLI operations
-    openCliForDatabase: extensionApi.openCliForDatabase,
-    executeRedisCommand: extensionApi.executeRedisCommand,
+    openCliForDatabase: extensionApiMock.openCliForDatabase,
+    executeRedisCommand: extensionApiMock.executeRedisCommand,
   }
 }
 
