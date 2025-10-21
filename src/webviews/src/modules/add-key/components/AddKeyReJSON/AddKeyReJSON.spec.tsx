@@ -95,7 +95,7 @@ describe('AddKeyReJSON', () => {
     expect(queryByTestId(textId)).toBeInTheDocument()
   })
 
-  it('should open sso oauth dialog when free trial redis cloud database link clicked', () => {
+  it('should open sso oauth dialog when free redis cloud database link clicked', () => {
     useDatabasesStore.setState({
       ...customState,
       connectedDatabase: {

@@ -11,6 +11,6 @@ export const OAUTH_ADVANTAGES_ITEMS = [
     title: l10n.t('Scalable and fully managed'),
   },
   {
-    title: l10n.t('Free trial database to get started immediately'),
+    title: l10n.t('Free Redis Cloud database to get started immediately'),
   },
 ]

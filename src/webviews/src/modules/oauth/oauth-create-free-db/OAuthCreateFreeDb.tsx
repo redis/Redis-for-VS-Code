@@ -45,11 +45,11 @@ const OAuthCreateFreeDb = ({ source, compressed }: Props) => {
 
   const description = !compressed
     ? l10n.t('Includes native support for JSON, Query and Search and more.')
-    : l10n.t('Get free trial Redis Cloud database')
+    : l10n.t('Get free Redis Cloud database')
 
   return (
     <>
-      {!compressed && <h2 className="pt-8 text-[16px]">{l10n.t('Create free trial Redis Cloud database')}</h2>}
+      {!compressed && <h2 className="pt-8 text-[16px]">{l10n.t('Create free Redis Cloud database')}</h2>}
       <RiButton
         className={cx(styles.link, { [styles.compressed]: compressed })}
         onClick={handleClick}

@@ -95,7 +95,7 @@ const OAuthCreateDb = (props: Props) => {
             {(form: React.ReactNode) => (
               <>
                 <div className={styles.subTitle}>{l10n.t('Get started with')}</div>
-                <div className={styles.title}><h2>{l10n.t('Free Trial Cloud database')}</h2></div>
+                <div className={styles.title}><h2>{l10n.t('Free Redis Cloud database')}</h2></div>
                 {form}
                 <div>
                   <OAuthRecommendedSettings value={isRecommended} onChange={handleChangeRecommendedSettings} />
@@ -107,7 +107,7 @@ const OAuthCreateDb = (props: Props) => {
         ) : (
           <>
             <div className={styles.subTitle}>{l10n.t('Get your')}</div>
-            <div className={styles.title}><h2>{l10n.t('Free Trial Cloud database')}</h2></div>
+            <div className={styles.title}><h2>{l10n.t('Free Redis Cloud database')}</h2></div>
             <Spacer size="xl" />
             <div >
               {l10n.t('The database will be created automatically and can be changed from Redis Cloud.')}

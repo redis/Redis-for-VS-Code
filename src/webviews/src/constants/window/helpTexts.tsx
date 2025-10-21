@@ -32,7 +32,7 @@ export const helpTexts = {
             data-testid="no-json-module-create-free-db"
             to=""
           >
-            {l10n.t('free trial Redis Cloud database')}
+            {l10n.t('free Redis Cloud database')}
           </Link>
           {l10n.t(' with built-in JSON support.')}
         </>
@@ -63,7 +63,7 @@ export const helpTexts = {
         target="_blank"
         data-test-subj="no-json-module-try-free"
       >
-        {l10n.t('free up-to-date trial')}
+        {l10n.t('free up-to-date')}
       </Link>
       {l10n.t(' Redis database.')}
     </>

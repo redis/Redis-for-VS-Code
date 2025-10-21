@@ -52,8 +52,8 @@ export const INFINITE_MESSAGES = {
           <span className="text-[15px]">
             { (step === CloudJobStep.Credentials || !step) && l10n.t('Processing Cloud API keys…')}
             { step === CloudJobStep.Subscription && l10n.t('Processing Cloud subscriptions…')}
-            { step === CloudJobStep.Database && l10n.t('Creating a free trial Cloud database…')}
-            { step === CloudJobStep.Import && l10n.t('Importing a free trial Cloud database…')}
+            { step === CloudJobStep.Database && l10n.t('Creating a free Redis Cloud database…')}
+            { step === CloudJobStep.Import && l10n.t('Importing a free Redis Cloud database…')}
           </span>
           <Spacer size="m" />
           <div>
@@ -158,10 +158,10 @@ export const INFINITE_MESSAGES = {
       >
         <Spinner type="clip" size="20px" className="min-w-5" />
         <div className="ml-2">
-          <div className="text-[15px]">{l10n.t('Your subscription does not have a free trial Redis Cloud database.')}</div>
+          <div className="text-[15px]">{l10n.t('Your subscription does not have a free Redis Cloud database.')}</div>
           <Spacer size="s" />
           <div>
-            {l10n.t('Do you want to create a free trial database in your existing subscription?')}
+            {l10n.t('Do you want to create a free database in your existing subscription?')}
           </div>
           <Spacer size="m" />
           <div className="flex justify-between">
