@@ -69,7 +69,7 @@ export const INFINITE_MESSAGES = {
   SUCCESS_CREATE_DB: (jobName: Maybe<CloudJobName>, onSuccess?: () => void) => {
     const withFeed = jobName
       && [CloudJobName.CreateFreeDatabase, CloudJobName.CreateFreeSubscriptionAndDatabase].includes(jobName)
-    const text = `${l10n.t('You can now use your Redis Stack database in Redis Cloud')}${withFeed ? l10n.t(' with pre-loaded sample data') : ''}.`
+    const text = `${l10n.t('You can now use your Redis Cloud database in Redis Cloud')}${withFeed ? l10n.t(' with pre-loaded sample data') : ''}.`
     return ({
       id: InfiniteMessagesIds.oAuthSuccess,
       Inner: (
