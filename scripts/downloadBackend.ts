@@ -17,6 +17,8 @@ const cdnPath = process.env.RI_CDN_PATH
 const backendPath = path.join(__dirname, '..', 'dist', 'redis-backend')
 const tutorialsPath = path.join(backendPath, 'dist-minified', 'defaults', 'tutorials')
 
+console.log('+++paths', cdnPath, backendPath, tutorialsPath)
+
 const downloadBackend = async () => {
   if (fs.existsSync(backendPath)) {
     console.debug('Backend folder already exists, deleting...')
@@ -59,6 +61,7 @@ async function downloadRedisBackendArchive(
 ): Promise<string> {
   ensureFolderExists(destDir)
   let downloadUrl = getDownloadUrl()
+  console.log('+++downloadUrl', downloadUrl)
 
   return new Promise((resolve, reject) => {
     const requestOptions: https.RequestOptions = parseUrl(downloadUrl)

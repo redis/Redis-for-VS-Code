@@ -152,7 +152,7 @@ const OAuthSelectPlan = () => {
 
         <div className={styles.subTitle}>
           {l10n.t(
-            'Select a cloud vendor and region to complete the final step towards your free trial Redis database.',
+            'Select a cloud vendor and region to complete the final step towards your free Redis Cloud database.',
           )}
           &nbsp;
           {l10n.t(
