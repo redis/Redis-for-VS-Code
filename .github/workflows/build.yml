@@ -54,20 +54,20 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       enterprise: ${{ inputs.enterprise }}
-
-  build-macos:
-    if: startsWith(inputs.target, 'macos') || endsWith(inputs.target, 'all')
-    uses: ./.github/workflows/pipeline-build-macos.yml
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
-      enterprise: ${{ inputs.enterprise }}
-      target: ${{ inputs.target }}
-
-  build-windows:
-    if: startsWith(inputs.target, 'windows') || endsWith(inputs.target, 'all')
-    uses: ./.github/workflows/pipeline-build-windows.yml
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
-      enterprise: ${{ inputs.enterprise }}
+#
+#  build-macos:
+#    if: startsWith(inputs.target, 'macos') || endsWith(inputs.target, 'all')
+#    uses: ./.github/workflows/pipeline-build-macos.yml
+#    secrets: inherit
+#    with:
+#      environment: ${{ inputs.environment }}
+#      enterprise: ${{ inputs.enterprise }}
+#      target: ${{ inputs.target }}
+#
+#  build-windows:
+#    if: startsWith(inputs.target, 'windows') || endsWith(inputs.target, 'all')
+#    uses: ./.github/workflows/pipeline-build-windows.yml
+#    secrets: inherit
+#    with:
+#      environment: ${{ inputs.environment }}
+#      enterprise: ${{ inputs.enterprise }}

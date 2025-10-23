@@ -69,13 +69,13 @@ jobs:
       - name: Build linux package x64 (production)
         if: inputs.environment == 'production'
         run: |
-          yarn package:prod --target linux-x64 --out ${packagePath}
+          yarn package:prod --target linux-x64 --out ${packagePath}-x64.vsix
 
       - name: Build linux package x64 (staging)
         if: inputs.environment == 'staging'
         run: |
           sed -i "s/^RI_APP_FOLDER_NAME=.*/RI_APP_FOLDER_NAME='.redis-for-vscode-stage'/" ${{ env.envFile }}
-          yarn package:stage --target linux-x64 --out ${packagePath}
+          yarn package:stage --target linux-x64 --out ${packagePath}-x64.vsix
 
       - name: Download backend arm64
         uses: ./.github/actions/download-backend
@@ -85,24 +85,24 @@ jobs:
       - name: Build linux package arm64 (production)
         if: inputs.environment == 'production'
         run: |
-          yarn package:prod --target linux-arm64 --out ${packagePath}
+          yarn package:prod --target linux-arm64 --out ${packagePath}-arm64.vsix
 
       - name: Build linux package arm64 (staging)
         if: inputs.environment == 'staging'
         run: |
           sed -i "s/^RI_APP_FOLDER_NAME=.*/RI_APP_FOLDER_NAME='.redis-for-vscode-stage'/" ${{ env.envFile }}
-          yarn package:stage --target linux-arm64 --out ${packagePath}
+          yarn package:stage --target linux-arm64 --out ${packagePath}-arm64.vsix
 
       - uses: actions/upload-artifact@v4
         name: Upload extension artifact
         with:
-          name: linux-build
+          name: linux-builds
           path: |
             release/redis-for-*.vsix
 
     env:
       envFile: '.env'
-      packagePath: './release/redis-for-vscode-extension-linux-x64.vsix'
+      packagePath: './release/redis-for-vscode-extension-linux'
       RI_SEGMENT_WRITE_KEY: ${{ secrets.RI_SEGMENT_WRITE_KEY }}
       RI_CLOUD_IDP_AUTHORIZE_URL: ${{ secrets.RI_CLOUD_IDP_AUTHORIZE_URL }}
       RI_CLOUD_IDP_TOKEN_URL: ${{ secrets.RI_CLOUD_IDP_TOKEN_URL }}
