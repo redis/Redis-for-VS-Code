@@ -5,28 +5,27 @@ on:
     branches:
       - 'release/**'
       - 'release-enterprise/**'
-      - 'tr/**'
 
 jobs:
-#  tests:
-#    name: Release stage tests
-#    uses: ./.github/workflows/tests.yml
-#    secrets: inherit
-#    with:
-#      group_tests: 'without_e2e'
-#      pre_release: true
+  tests:
+    name: Release stage tests
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
+    with:
+      group_tests: 'without_e2e'
+      pre_release: true
 
   builds:
     name: Release stage builds
     uses: ./.github/workflows/build.yml
-#    needs: tests
+    needs: tests
     secrets: inherit
     with:
       environment: 'staging'
       target: 'all'
       enterprise: ${{ startsWith(github.ref_name, 'release-enterprise/') }}
-#
-#  e2e-linux-tests:
-#    needs: builds
-#    uses: ./.github/workflows/tests-e2e-linux.yml
-#    secrets: inherit
+
+  e2e-linux-tests:
+    needs: builds
+    uses: ./.github/workflows/tests-e2e-linux.yml
+    secrets: inherit
