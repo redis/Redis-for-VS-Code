@@ -11,10 +11,9 @@ on:
         type: choice
         options:
           - all
-          - macos:x64
-          - macos:arm64
-          - linux:x64
-          - windows:x64
+          - macos:all (amd64, arm64)
+          - linux:all (amd64, arm64)
+          - windows:all (amd64)
 
       environment:
         description: Environment to run build
