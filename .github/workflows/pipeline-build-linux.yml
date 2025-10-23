@@ -47,9 +47,6 @@ jobs:
       - name: Install dependencies for root package.js
         run: yarn install --frozen-lockfile
 
-      - name: Download backend
-        uses: ./.github/actions/download-backend
-
       - name: Configure Environment Variables
         run: |
           {
@@ -66,6 +63,9 @@ jobs:
             echo "RI_APP_TYPE=${{ env.RI_APP_TYPE }}"
           } >> "${{ env.envFile }}"
 
+      - name: Download backend
+        uses: ./.github/actions/download-backend
+
       - name: Build linux package (production)
         if: inputs.environment == 'production'
         run: |
@@ -76,6 +76,22 @@ jobs:
         run: |
           sed -i "s/^RI_APP_FOLDER_NAME=.*/RI_APP_FOLDER_NAME='.redis-for-vscode-stage'/" ${{ env.envFile }}
           yarn package:stage --target linux-x64 --out ${packagePath}
+
+      - name: Download backend
+        uses: ./.github/actions/download-backend
+        with:
+          arch: arm64
+
+      - name: Build linux package (production)
+        if: inputs.environment == 'production'
+        run: |
+          yarn package:prod --target linux-arm64 --out ${packagePath}
+
+      - name: Build linux package (staging)
+        if: inputs.environment == 'staging'
+        run: |
+          sed -i "s/^RI_APP_FOLDER_NAME=.*/RI_APP_FOLDER_NAME='.redis-for-vscode-stage'/" ${{ env.envFile }}
+          yarn package:stage --target linux-arm64 --out ${packagePath}
 
       - uses: actions/upload-artifact@v4
         name: Upload extension artifact
