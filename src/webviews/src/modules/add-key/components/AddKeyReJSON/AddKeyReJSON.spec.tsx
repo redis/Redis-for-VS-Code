@@ -26,7 +26,7 @@ const mockConnectedDatabase: Nullable<Database> = {
   tls: false,
   db: 0,
   lastConnection: new Date(),
-  provider: 'RE_CLOUD',
+  provider: 'REDIS_CLOUD',
   connectionType: ConnectionType.Standalone,
   version: null,
 }
