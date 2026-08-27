@@ -10,6 +10,43 @@ interface Props {
 
 export const constructKeysToTree = (props: Props): any[] => {
   const { items: keys, delimiterPattern = ':', delimiters = [], sorting = 'ASC' } = props
+
+  // Declared inline because this whole function is stringified into a Web Worker
+  // Blob by `useDisposableWebworker` and cannot reference module scope.
+  // Keep in sync with uiSrc/modules/keys-tree/utils/splitKeyName.
+  const splitKeyName = (name: string, pattern: string): string[] => {
+    const tagStart = name.indexOf('{')
+    const tagEnd = tagStart === -1 ? -1 : name.indexOf('}', tagStart + 1)
+
+    // no usable hash tag - keep the original behaviour
+    if (tagEnd <= tagStart + 1 || !pattern) {
+      return name.split(new RegExp(pattern, 'g'))
+    }
+
+    const regex = new RegExp(pattern, 'g')
+    const parts: string[] = []
+    let partStart = 0
+    let match = regex.exec(name)
+
+    while (match !== null) {
+      const { length } = match[0]
+
+      if (length === 0) {
+        // never let a zero-length match stall the scan
+        regex.lastIndex += 1
+      } else if (match.index <= tagStart || match.index + length > tagEnd) {
+        parts.push(name.slice(partStart, match.index))
+        partStart = match.index + length
+      }
+
+      match = regex.exec(name)
+    }
+
+    parts.push(name.slice(partStart))
+
+    return parts
+  }
+
   const keysSymbol = `keys${delimiterPattern}keys`
   const tree: any = {}
 
@@ -17,7 +54,7 @@ export const constructKeysToTree = (props: Props): any[] => {
     // eslint-disable-next-line prefer-object-spread
     let currentNode: any = tree
     const { nameString: name = '' } = key
-    const nameSplitted = name.split(new RegExp(delimiterPattern, 'g'))
+    const nameSplitted = splitKeyName(name, delimiterPattern)
     const lastIndex = nameSplitted.length - 1
 
     nameSplitted.forEach((value: any, index: number) => {

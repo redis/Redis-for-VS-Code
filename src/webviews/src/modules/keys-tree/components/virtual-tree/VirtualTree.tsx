@@ -18,6 +18,7 @@ import { Node } from '../node'
 import { MIN_NODE_WIDTH, PADDING_LEVEL } from '../../constants'
 
 import { useKeysApi } from '../../hooks/useKeys'
+import { splitKeyName } from '../../utils'
 import styles from './styles.module.scss'
 
 export interface Props {
@@ -200,7 +201,7 @@ const VirtualTree = (props: Props) => {
       size: node.size,
       type: node.type,
       fullName: node.fullName,
-      shortName: node.nameString?.split(new RegExp(delimiterPattern, 'g')).pop(),
+      shortName: node.nameString == null ? undefined : splitKeyName(node.nameString, delimiterPattern).pop(),
       delimiters,
       nestingLevel: getNestingLevel(nestingLevel),
       deleting,
